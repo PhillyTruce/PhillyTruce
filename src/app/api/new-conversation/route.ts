@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import twilioClient from "@/lib/twilio-client";
-import prisma from "@/db/prisma";
+import { Report } from "@/db/mongoDB/report-schema";
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,25 +27,23 @@ export async function POST(request: NextRequest) {
         target: "webhook",
       });
 
-    await prisma.report.create({
-      data: {
-        incident_report_number: parseInt(conversationSid.slice(-4), 10),
-        report_origin: "witness_text",
-        report_initiated_at: new Date(),
-        report_stage: "data_gathering",
-        incident_type: ["fist", "gun", "knifing"],
-        description: "This is a test report.",
-        location: "Test location",
-        report_last_updated_at: new Date(),
-        ppd_notified: false,
+    await Report.create({
+      incident_report_number: parseInt(conversationSid.slice(-4), 10),
+      report_origin: "witness_text",
+      report_initiated_at: new Date(),
+      report_stage: "data_gathering",
+      incident_type: ["fist", "gun", "knifing"],
+      description: "This is a test report.",
+      location: "Test location",
+      report_last_updated_at: new Date(),
+      ppd_notified: false,
 
-        messages: {
-          message_id: formData.get("MessagingServiceSid"),
-          from: formData.get("MessagingBinding.Address"),
-          to: formData.get("MessagingBinding.ProxyAddress"),
-          message_content: "Example message.",
-          created_at: new Date(),
-        },
+      messages: {
+        message_id: formData.get("MessagingServiceSid"),
+        from: formData.get("MessagingBinding.Address"),
+        to: formData.get("MessagingBinding.ProxyAddress"),
+        message_content: "Example message.",
+        created_at: new Date(),
       },
     });
 

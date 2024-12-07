@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Report } from "@/db/mongoDB/report-schema";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -9,7 +7,7 @@ export async function PUT(request: NextRequest) {
 
     // Extract the report ID and the new data from the request body
     const {
-      incident_report_number, 
+      incident_report_number,
       incident_type,
       location,
       date,
@@ -27,20 +25,22 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update the report in the database
-    const updatedReport = await prisma.report.update({
-      where: { incident_report_number: Number(incident_report_number) },
-      data: {
-        incident_type,
-        report_origin: "user_created",
-        report_stage: "claimed",
-        description,
-        location,
-        report_last_updated_at: new Date(),
-        ppd_notified,
-        creator_user_id: "66ba6bfd81833a6900354b86",
-        report_initiated_at: new Date(`${date}T${time}`),
-      },
-    });
+    const updatedReport = await Report.findOneAndUpdate(
+      { incident_report_number: Number(incident_report_number) },
+      {
+        $set: {
+          incident_type,
+          report_origin: "user_created",
+          report_stage: "claimed",
+          description,
+          location,
+          report_last_updated_at: new Date(),
+          ppd_notified,
+          creator_user_id: "66ba6bfd81833a6900354b86",
+          report_initiated_at: new Date(`${date}T${time}`),
+        },
+      }
+    );
 
     return NextResponse.json(
       { message: "Report updated successfully", report: updatedReport },
@@ -52,7 +52,5 @@ export async function PUT(request: NextRequest) {
       { error: "Failed to update report" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
