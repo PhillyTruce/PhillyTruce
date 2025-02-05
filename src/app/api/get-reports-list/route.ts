@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/db/prisma";
+import { Report } from "@/db/mongoDB/report-schema";
 import { ReportSummaryType } from "@/app/reports/page";
 
 export async function GET(request: NextRequest) {
-  const reports = await prisma.report.findMany({
-    select: {
-      report_stage: true,
-      incident_report_number: true,
-      id: true,
-      report_initiated_at: true,
-    },
+  const reports = await Report.find({
+    report_stage: true,
+    incident_report_number: true,
+    id: true,
+    report_initiated_at: true,
   });
 
   const unclaimed = reports.filter(

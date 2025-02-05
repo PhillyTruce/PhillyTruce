@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/db/prisma";
+
+import { Report } from "@/db/mongoDB/report-schema";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,19 +14,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const foundReport = await prisma.report.findUnique({
-      where: {
-        incident_report_number: Number(incidentReportNumber),
-      },
-      // include: {
-      //   creator_user: {
-      //     select: {
-      //       name: true,
-      //       phone: true,
-      //     }
-      //   }
-      // },
-    });
+    // const foundReport = await prisma.report.findUnique({
+    //   where: {
+    //     incident_report_number: Number(incidentReportNumber),
+    //   },
+    //   // include: {
+    //   //   creator_user: {
+    //   //     select: {
+    //   //       name: true,
+    //   //       phone: true,
+    //   //     }
+    //   //   }
+    //   // },
+    // });
+    const foundReport = await Report.find({
+      incident_report_number: Number(incidentReportNumber),
+    }).exec();
 
     if (!foundReport) {
       return NextResponse.json({ error: "Report not found" }, { status: 404 });
