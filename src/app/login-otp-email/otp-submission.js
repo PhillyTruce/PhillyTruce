@@ -27,7 +27,7 @@ export default function Otp() {
             <input
               key={index}
               ref={(el) => (inputRefs.current[index] = el)}
-              className="flex-1 text-center rounded border-2 border-accent2 w-12 h-12 text-primary text-2xl otp"
+              className="flex-1 text-center rounded border-2 border-black w-12 h-12 text-primary text-2xl otp"
               type="text"
               maxLength={1}
               onChange={(event) => handleChange(event, index)}
