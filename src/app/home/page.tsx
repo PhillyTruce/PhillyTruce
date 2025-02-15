@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
-import SessionControl from "@/components/auth/session-control";
+//import SessionControl from "@/components/auth/session-control";
 import ListItems from "../../data/list-items.json";
 import Image from "next/image";
 import Thumbnail from "./list-thumbnail.png";
@@ -11,7 +11,7 @@ import ClockIn from "./clock-in";
 
 export default async function Home() {
 
-  const session = await SessionControl();
+  //const session = await SessionControl();
   const date = new Date();
   const day = date.getDate();
   const months = [

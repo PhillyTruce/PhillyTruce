@@ -125,7 +125,8 @@ export default function Menu({ hasOverflow }: { hasOverflow: boolean }) {
     pathname === "/login" ||
     pathname === "/sign-up-otp-mobile" ||
     pathname.startsWith("/messages/CH") ||
-    pathname === "/sign-up"
+    pathname === "/sign-up"||
+    pathname === "/login-otp-email"
   ) {
     return null;
   }

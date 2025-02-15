@@ -1,8 +1,17 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "express"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "express"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,8 +29,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
@@ -31,5 +43,7 @@
     "src/app/home/clock-in.js",
     "src/app/sign-up/otp/[phone]/otp-submission.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
