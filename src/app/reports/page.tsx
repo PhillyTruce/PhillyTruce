@@ -1,6 +1,6 @@
 import ReportList from "@/components/reports/ReportList";
 import SearchBar from "@/components/search-bar";
-import prisma from "@/db/prisma";
+import { Report } from "@/db/mongoDB/report-schema";
 
 export type ReportSummaryType = {
   id: string;
@@ -10,7 +10,7 @@ export type ReportSummaryType = {
 };
 
 const fetchAllReports = async () => {
-  const reports = await prisma.report.findMany({
+  const reports = await Report.find({
     select: {
       report_stage: true,
       incident_report_number: true,

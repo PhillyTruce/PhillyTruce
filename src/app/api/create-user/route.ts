@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import User from "@/db/mongoDB/user-schema";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,18 +14,16 @@ export async function POST(request: NextRequest) {
       is_messaging_onboarding_complete,
     } = body;
 
-    const newUser = await prisma.user.create({
-      data: {
-        first_name,
-        last_name,
-        phone_number: parseInt(phone_number),
-        last_logged_in_at: last_logged_in_at
-          ? new Date(last_logged_in_at)
-          : new Date(),
-        created_at: created_at ? new Date(created_at) : new Date(),
-        is_messaging_onboarding_complete:
-          is_messaging_onboarding_complete || false,
-      },
+    const newUser = await User.create({
+      first_name,
+      last_name,
+      phone_number: parseInt(phone_number),
+      last_logged_in_at: last_logged_in_at
+        ? new Date(last_logged_in_at)
+        : new Date(),
+      created_at: created_at ? new Date(created_at) : new Date(),
+      is_messaging_onboarding_complete:
+        is_messaging_onboarding_complete || false,
     });
 
     return NextResponse.json(

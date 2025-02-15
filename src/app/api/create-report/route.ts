@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Report } from "@/db/mongoDB/report-schema";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,7 +13,7 @@ export async function POST(request: NextRequest) {
     const reportNumber = await generateUniqueReportNumber();
 
     // Create a new user-created report
-    const newReport = await prisma.report.create({
+    const newReport = await Report.create({
       data: {
         incident_report_number: reportNumber,
         report_origin: "user_created",
@@ -40,8 +38,6 @@ export async function POST(request: NextRequest) {
       { error: "Failed to create report" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -52,18 +48,15 @@ async function generateUniqueReportNumber(): Promise<number> {
   while (!isUnique) {
     try {
       // Try to find a report with this number
-      await prisma.$transaction(async (tx) => {
-        const existingReport = await tx.report.findUnique({
-          where: { incident_report_number: reportNumber },
-        });
-
-        if (existingReport) {
-          throw new Error("Report number already exists");
-        }
-
-        // If we reach here, the report number is unique
-        isUnique = true;
+      const existingReport = await Report.find({
+        incident_report_number: reportNumber,
       });
+      if (existingReport) {
+        throw new Error("Report number already exists");
+      }
+
+      // If we reach here, the report number is unique
+      isUnique = true;
     } catch (error) {
       // If there's an error, it means the number already exists, so we'll try again
       console.log(
